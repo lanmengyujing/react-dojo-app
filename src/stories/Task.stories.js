@@ -2,7 +2,11 @@ import React from 'react';
 
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { withKnobs, object } from '@storybook/addon-knobs/react';
+
 import Task from '../components/Task';
+
+import { text } from '@storybook/addon-knobs/react';
 
 export const task = {
   id: '1',
@@ -16,8 +20,18 @@ export const actions = {
   onArchiveTask: action('onArchiveTask')
 };
 
+const label = 'Your Name';
+const defaultValue = 'Arunoda Susiripala';
+const groupId = 'GROUP-ID1';
+
+const value = text(label, defaultValue, groupId);
+
 storiesOf('Task', module)
-  .add('default', () => <Task task={task} {...actions} />)
+  .addDecorator(withKnobs)
+
+  .add('default', () => {
+    return <Task task={object('task', { ...task })} {...actions} />;
+  })
   .add('pinned', () => (
     <Task task={{ ...task, state: 'TASK_PINNED' }} {...actions} />
   ))
